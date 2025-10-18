@@ -37,12 +37,12 @@ canvas {
 
 .arrow-up {
   bottom: 130px;
-  right: 30px;
+  left: 30px;
 }
 
 .shoot {
   bottom: 130px;
-  left: 30px;
+  right: 30px;
 }
 
 .active {
