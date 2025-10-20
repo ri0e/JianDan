@@ -4,7 +4,7 @@ import { map, tileSize, getMapOffsetY } from "./map.js";
 import { resolveHorizontalCollision, resolveVerticalCollision } from "./collision.js";
 import { updateCamera, camera } from "./camera.js";
 import { bullets, updateBullets } from "./bullet.js";
-import { keyboardControls, keys } from "./input.js";
+import { keyboardControls, buttonsControls, keys } from "./input.js";
 
 console.log("hi get out of the console :3");
 
@@ -17,10 +17,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const HEIGHT = (c.height = window.innerHeight - 30);
   const mapOffsetY = getMapOffsetY(HEIGHT);
 
+  initPlayer(WIDTH, HEIGHT);
+
   c.oncontextmenu = (e) => e.preventDefault();
 
-  initPlayer(WIDTH, HEIGHT);
+  // === MOVEMENT CONTROLS === //
+  const upBtn = document.getElementById('up');
+  const rightBtn = document.getElementById('right');
+  const leftBtn = document.getElementById('left');
+  const shootBtn = document.getElementById('shoot');
+
   keyboardControls(player);
+  buttonsControls(upBtn, rightBtn, leftBtn, shootBtn);
 
   // === GAME LOOP === //
   function update() {

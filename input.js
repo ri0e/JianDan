@@ -33,3 +33,61 @@ export function buttonsListeners(btn, onPress, onRelease) {
     btn.addEventListener(evt, onRelease);
   });
 }
+
+export function buttonsControls(upBtn, rightBtn, leftBtn, shootBtn) {
+  buttonsListeners(
+    leftBtn,
+    () => {
+      leftBtn.classList.add("active");
+      keys.left = true;
+      player.facing = "left";
+    },
+    () => {
+      leftBtn.classList.remove("active");
+      keys.left = false;
+    }
+  );
+
+  buttonsListeners(
+    rightBtn,
+    () => {
+      rightBtn.classList.add("active");
+      keys.right = true;
+      player.facing = "right";
+    },
+    () => {
+      rightBtn.classList.remove("active");
+      keys.right = false;
+    }
+  );
+
+  buttonsListeners(
+    upBtn,
+    () => {
+      upBtn.classList.add("active");
+      jumpPlayer();
+      upBtn.disabled = true;
+      setTimeout(() => {
+        upBtn.disabled = false;
+      }, 100);
+    },
+    () => {
+      upBtn.classList.remove("active");
+    }
+  );
+
+  buttonsListeners(
+    shootBtn,
+    () => {
+      shootBtn.classList.add("active");
+      shootBullet();
+      shootBtn.disabled = true;
+      setTimeout(() => {
+        shootBtn.disabled = false;
+      }, 100);
+    },
+    () => {
+      shootBtn.classList.remove("active");
+    }
+  );
+}
