@@ -7,5 +7,5 @@ export function updateCamera(player, WIDTH, HEIGHT, map, tileSize) {
 
   // Prevent the camera from showing empty space
   camera.x = Math.max(0, Math.min(camera.x, map[0].length * tileSize - WIDTH));
-  camera.y = Math.max(0, Math.min(camera.y, map.length * tileSize - HEIGHT));
+  camera.y = Math.min(0, Math.min(camera.y, map.length * tileSize - HEIGHT));
 }
