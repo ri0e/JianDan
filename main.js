@@ -1,9 +1,9 @@
 // === MAIN GAME FILE === //
 import { player, initPlayer } from "./player.js";
 import { map, tileSize, getMapOffsetY } from "./map.js";
-import { resolveHorizontalCollision, resolveVerticalCollision } from "./collision.js";
+import { resolveHorizontalCollision, resolveVerticalCollision, resolveHorizontalCollisionForBullets } from "./collision.js";
 import { updateCamera, camera } from "./camera.js";
-import { bullets, updateBullets } from "./bullet.js";
+import { bullets, bulletsProps, updateBullets } from "./bullet.js";
 import { keyboardControls, buttonsControls, keys } from "./input.js";
 
 console.log("hi get out of the console :3");
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const shootBtn = document.getElementById('shoot');
 
   keyboardControls(player);
-  buttonsControls(upBtn, rightBtn, leftBtn, shootBtn);
+  buttonsControls(upBtn, rightBtn, leftBtn, shootBtn, player);
 
   // === GAME LOOP === //
   function update() {
@@ -51,7 +51,10 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     // === Update Bullets === //
-    updateBullets(WIDTH);
+    updateBullets(WIDTH, bullets, mapOffsetY);
+    for (const bullet of bullets) {
+      resolveHorizontalCollisionForBullets(bullet, map, tileSize, mapOffsetY);
+    }
 
     // === Update Camera === //
     updateCamera(player, WIDTH, HEIGHT, map, tileSize);

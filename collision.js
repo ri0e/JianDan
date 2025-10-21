@@ -2,7 +2,7 @@
 import { map, tileSize } from "./map.js";
 
 // === Get Tiles That Collide With Player === //
-export function getCollidingTiles(x, y, width, height, mapOffsetY) {
+function getCollidingTiles(x, y, width, height, mapOffsetY) {
   const tiles = [];
   const startCol = Math.floor(x / tileSize);
   const endCol = Math.floor((x + width) / tileSize);
@@ -24,7 +24,30 @@ export function getCollidingTiles(x, y, width, height, mapOffsetY) {
   return tiles;
 }
 
-// === Resolve Horizontal Collision === //
+// === Get Tiles That Collide With The Bullets === //
+function getCollidingTilesWithBullets(x, y, width, height, mapOffsetY, map, tileSize) {
+  const tiles = [];
+  const startCol = Math.floor(x / tileSize);
+  const endCol = Math.floor((x + width) / tileSize);
+  const startRow = Math.floor((y - mapOffsetY) / tileSize);
+  const endRow = Math.floor((y + height - mapOffsetY) / tileSize);
+
+  for (let row = startRow; row <= endRow; row++) {
+    for (let col = startCol; col <= endCol; col++) {
+      if (map[row] && map[row][col] === 1) {
+        tiles.push({
+          x: col * tileSize,
+          y: row * tileSize + mapOffsetY,
+          width: tileSize,
+          height: tileSize,
+        });
+      }
+    }
+  }
+  return tiles;
+}
+
+// === Resolve Horizontal Collision (Player) === //
 export function resolveHorizontalCollision(player, mapOffsetY) {
   const tiles = getCollidingTiles(
     player.x,
@@ -50,7 +73,7 @@ export function resolveHorizontalCollision(player, mapOffsetY) {
   }
 }
 
-// === Resolve Vertical Collision === //
+// === Resolve Vertical Collision (Player) === //
 export function resolveVerticalCollision(player, mapOffsetY) {
   const tiles = getCollidingTiles(
     player.x,
@@ -76,6 +99,38 @@ export function resolveVerticalCollision(player, mapOffsetY) {
       } else {
         player.y = tile.y + tile.height;
         player.velocityY = 0;
+      }
+    }
+  }
+}
+
+// === Resolve Horizontal Collision (Bullets) === //
+export function resolveHorizontalCollisionForBullets(bullet, map, tileSize, mapOffsetY) {
+  const tiles = getCollidingTilesWithBullets(
+    bullet.x,
+    bullet.y,
+    bullet.width,
+    bullet.height,
+    mapOffsetY,
+    map,
+    tileSize
+  );
+
+  for (const tile of tiles) {
+    if (
+      bullet.x < tile.x + tile.width &&
+      bullet.x + bullet.width > tile.x &&
+      bullet.y < tile.y + tile.height &&
+      bullet.y + bullet.height > tile.y
+    ) {
+      if (bullet.x + bullet.width / 2 < tile.x + tile.width / 2) {
+        bullet.x = tile.x - bullet.width;
+        bullet.height = 0;
+        bullet.width = 0;
+      } else {
+        bullet.x = tile.x + tile.width;
+        bullet.height = 0;
+        bullet.width = 0;
       }
     }
   }
