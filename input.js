@@ -34,7 +34,7 @@ export function buttonsListeners(btn, onPress, onRelease) {
   });
 }
 
-export function buttonsControls(upBtn, rightBtn, leftBtn, shootBtn) {
+export function buttonsControls(upBtn, rightBtn, leftBtn, shootBtn, player) {
   buttonsListeners(
     leftBtn,
     () => {
@@ -80,7 +80,7 @@ export function buttonsControls(upBtn, rightBtn, leftBtn, shootBtn) {
     shootBtn,
     () => {
       shootBtn.classList.add("active");
-      shootBullet();
+      shootBullet(player);
       shootBtn.disabled = true;
       setTimeout(() => {
         shootBtn.disabled = false;
